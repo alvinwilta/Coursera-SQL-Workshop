@@ -1,0 +1,20 @@
+SELECT DISTINCT
+  B.name AS Name,
+  B.stars,
+  CASE 
+    WHEN H.hours LIKE "%Monday%" THEN DATEDIFF(hour,CONVERT(datetime,SUBSTR(H.hours,8,5),hh),RIGHT(H.hours,5))
+    WHEN H.hours LIKE "%Tuesday%" THEN DATEDIFF(hour,SUBSTR(H.hours,9,5),RIGHT(H.hours,5))
+    WHEN H.hours LIKE "%Wednesday%" THEN DATEDIFF(hour,SUBSTR(H.hours,11,5),RIGHT(H.hours,5))
+    WHEN H.hours LIKE "%Thursday%" THEN DATEDIFF(hour,SUBSTR(H.hours,10,5),RIGHT(H.hours,5))
+    WHEN H.hours LIKE "%Friday%" THEN DATEDIFF(hour,SUBSTR(H.hours,8,5),RIGHT(H.hours,5))
+    WHEN H.hours LIKE "%Saturday%" THEN DATEDIFF(hour,SUBSTR(H.hours,10,5),RIGHT(H.hours,5))
+    WHEN H.hours LIKE "%Sunday%" THEN DATEDIFF(hour,SUBSTR(H.hours,8,5),RIGHT(H.hours,5))
+  END
+  H.hours
+FROM business B INNER JOIN hours H
+		ON B.id = H.business_id
+		INNER JOIN category C
+		ON C.business_id = B.id
+WHERE C.category="Shopping" AND B.city="Charlotte"
+ORDER BY stars DESC
+		
